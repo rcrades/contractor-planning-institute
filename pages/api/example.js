@@ -11,13 +11,21 @@ export default async function handler(req, res) {
         timestamp: new Date().toISOString()
       }; // The value (response data)
       
-      // Log the response
-      await logResponse(userId, responseData);
+      console.log('Attempting to log response for user:', userId);
+      console.log('Response data:', responseData);
       
-      res.status(200).json({ success: true });
+      // Log the response
+      const result = await logResponse(userId, responseData);
+      console.log('Log result:', result);
+      
+      res.status(200).json({ success: true, data: result });
     } catch (error) {
       console.error('Error in API route:', error);
-      res.status(500).json({ error: 'Failed to log response' });
+      res.status(500).json({ 
+        error: 'Failed to log response', 
+        details: error.message,
+        stack: error.stack
+      });
     }
   } else if (req.method === 'GET') {
     try {
