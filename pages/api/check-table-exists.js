@@ -5,6 +5,12 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+/**
+ * API endpoint to check if the response_logs table exists in Supabase
+ * 
+ * @route GET /api/check-table-exists
+ * @returns {object} JSON response indicating if the table exists
+ */
 export default async function handler(req, res) {
   try {
     console.log('Checking if response_logs table exists...');
@@ -22,7 +28,7 @@ export default async function handler(req, res) {
       
       // Try a simpler approach - just try to select from the table
       console.log('Trying to select from the table directly...');
-      const { data: testData, error: testError } = await supabase
+      const { data: _testData, error: testError } = await supabase
         .from('response_logs')
         .select('id')
         .limit(1);

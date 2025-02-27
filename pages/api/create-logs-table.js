@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     // Create the table using Supabase's built-in methods instead of exec_sql
     
     // 1. First, check if the table already exists
-    const { data: existingTable, error: checkError } = await supabase
+    const { data: _existingTable, error: checkError } = await supabase
       .from('response_logs')
       .select('*')
       .limit(1)
