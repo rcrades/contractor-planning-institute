@@ -1,196 +1,43 @@
-"use client"
+import { Button } from "@/components/ui/button"
+import { HardHat, ArrowRight } from "lucide-react"
 
-import { useState, useRef } from "react"
-import WelcomeScreen from "@/components/welcome-screen"
-import EducationalSection from "@/components/educational-section"
-import QuestionSection from "@/components/question-section"
-import ResultsScreen from "@/components/results-screen"
-import ProgressBar from "@/components/progress-bar"
-import EmailOverlay from "@/components/email-overlay"
-
-export default function SurveyApp() {
-  const [currentStep, setCurrentStep] = useState(0)
-  const [showEmailOverlay, setShowEmailOverlay] = useState(false)
-  const [email, setEmail] = useState("")
-
-  const [responses, setResponses] = useState({
-    motivation: "",
-    revenue: "",
-    employees: "",
-    buyerPreference: "",
-    preparation: "",
-    timeline: "",
-  })
-
-  const confettiButtonRef = useRef(null)
-
-  const handleResponse = (question: string, answer: string) => {
-    setResponses((prev) => ({
-      ...prev,
-      [question]: answer,
-    }))
-  }
-
-  const nextStep = () => {
-    if (currentStep === surveySteps.length - 2) {
-      if (confettiButtonRef.current) {
-        confettiButtonRef.current.triggerConfetti()
-      }
-      setTimeout(() => {
-        setShowEmailOverlay(true)
-      }, 2000)
-    }
-    setCurrentStep(currentStep + 1)
-    window.scrollTo(0, 0)
-  }
-
-  const prevStep = () => {
-    setCurrentStep(currentStep - 1)
-    window.scrollTo(0, 0)
-  }
-
-  const handleEmailSubmit = (submittedEmail: string) => {
-    setEmail(submittedEmail)
-    setShowEmailOverlay(false)
-    // Here you would typically send the email to your backend
-    console.log(`Report sent to: ${submittedEmail}`)
-  }
-
-  // Survey content structure
-  const surveySteps = [
-    { type: "welcome" },
-    {
-      type: "educational",
-      title: "Why Consider Selling?",
-      content:
-        "Many owners sell for retirement, growth, or liquidity. Industry trends show increased M&A activity due to infrastructure spending.",
-      transition: "Let's understand your goals.",
-    },
-    {
-      type: "question",
-      title: "Motivation",
-      questions: [
-        {
-          id: "motivation",
-          text: "What's your primary reason for considering a sale?",
-          options: ["Retirement", "Growth opportunities", "Financial liquidity", "Other"],
-        },
-      ],
-    },
-    {
-      type: "educational",
-      title: "Business Snapshot",
-      content:
-        "Buyers assess revenue, profitability, and team size. Knowing your firm's profile helps tailor your sale strategy.",
-      transition: "Tell us about your business.",
-    },
-    {
-      type: "question",
-      title: "Business Details",
-      questions: [
-        {
-          id: "revenue",
-          text: "What's your firm's annual revenue?",
-          options: ["Less than $1M", "$1M-$5M", "$5M-$20M", "More than $20M"],
-        },
-        {
-          id: "employees",
-          text: "How many employees do you have?",
-          options: ["Less than 10", "10-50", "50-100", "More than 100"],
-        },
-      ],
-    },
-    {
-      type: "educational",
-      title: "Buyer Types",
-      content:
-        "Strategic buyers (e.g., competitors) seek synergies, while PE firms aim for profit through efficiency. Your preference shapes the process.",
-      transition: "Who would you prefer to sell to?",
-    },
-    {
-      type: "question",
-      title: "Buyer Preference",
-      questions: [
-        {
-          id: "buyerPreference",
-          text: "Would you prefer a strategic buyer or a PE firm?",
-          options: ["Strategic (e.g., for legacy)", "PE (e.g., for quick liquidity)", "No preference"],
-        },
-      ],
-    },
-    {
-      type: "educational",
-      title: "Readiness",
-      content:
-        "Preparation (valuation, audits) can boost your sale price. Timing also matters—most deals take 6-12 months.",
-      transition: "How ready are you?",
-    },
-    {
-      type: "question",
-      title: "Preparation and Timeline",
-      questions: [
-        {
-          id: "preparation",
-          text: "Have you taken steps to prepare your business for sale?",
-          options: ["Yes (e.g., valuation, audits)", "No"],
-        },
-        {
-          id: "timeline",
-          text: "What's your expected timeline for the sale?",
-          options: ["Less than 6 months", "6-12 months", "More than 12 months"],
-        },
-      ],
-    },
-    { type: "results" },
-  ]
-
-  const progressPercentage = (currentStep / (surveySteps.length - 1)) * 100
-
-  const renderStep = () => {
-    const step = surveySteps[currentStep]
-
-    switch (step.type) {
-      case "welcome":
-        return <WelcomeScreen onNext={nextStep} />
-      case "educational":
-        return (
-          <EducationalSection
-            title={step.title}
-            content={step.content}
-            transition={step.transition}
-            onNext={nextStep}
-            onBack={currentStep > 0 ? prevStep : undefined}
-          />
-        )
-      case "question":
-        return (
-          <QuestionSection
-            title={step.title}
-            questions={step.questions}
-            responses={responses}
-            onResponse={handleResponse}
-            onNext={nextStep}
-            onBack={prevStep}
-            isLastQuestion={currentStep === surveySteps.length - 2}
-            confettiButtonRef={confettiButtonRef}
-          />
-        )
-      case "results":
-        return <ResultsScreen responses={responses} email={email} />
-      default:
-        return null
-    }
-  }
-
+export default function Page() {
   return (
-    <div className="min-h-screen flex flex-col bg-neutral-900">
-      {currentStep > 0 && currentStep < surveySteps.length - 1 && (
-        <div className="sticky top-0 z-10 bg-neutral-900 shadow-md">
-          <ProgressBar percentage={progressPercentage} />
+    <div className="flex min-h-svh items-center justify-center bg-zinc-900 text-white p-4">
+      <div className="max-w-3xl mx-auto text-center">
+        <div className="flex items-center justify-center mb-6">
+          <HardHat className="h-12 w-12 text-yellow-400 mr-2" />
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Contractor Planning Institute</h1>
         </div>
-      )}
-      <main className="flex-1 flex flex-col">{renderStep()}</main>
-      {showEmailOverlay && <EmailOverlay onSubmit={handleEmailSubmit} />}
+
+        <p className="text-xl md:text-2xl mt-6 mb-10 text-zinc-300 max-w-2xl mx-auto leading-relaxed">
+          Learn about selling your construction firm and get personalized next steps in{" "}
+          <span className="text-yellow-400 font-semibold">3 minutes</span>.
+        </p>
+
+        <Button
+          size="lg"
+          className="mt-8 bg-yellow-500 hover:bg-yellow-600 text-black font-medium text-lg px-8 py-6 h-auto"
+        >
+          Get Started
+          <ArrowRight className="ml-2 h-5 w-5" />
+        </Button>
+
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+          <div className="bg-zinc-800 p-6 rounded-lg border border-zinc-700">
+            <div className="text-yellow-400 font-bold text-lg mb-2">Step 1</div>
+            <p className="text-zinc-300">Answer a few questions about your construction business</p>
+          </div>
+          <div className="bg-zinc-800 p-6 rounded-lg border border-zinc-700">
+            <div className="text-yellow-400 font-bold text-lg mb-2">Step 2</div>
+            <p className="text-zinc-300">Receive a personalized valuation estimate</p>
+          </div>
+          <div className="bg-zinc-800 p-6 rounded-lg border border-zinc-700">
+            <div className="text-yellow-400 font-bold text-lg mb-2">Step 3</div>
+            <p className="text-zinc-300">Get a detailed roadmap for selling your firm</p>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
