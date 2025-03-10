@@ -1,21 +1,17 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist, Azeret_Mono as Geist_Mono } from "next/font/google"
+import { Inter } from "next/font/google"
 import "./globals.css"
 
-const geistSans = Geist({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-sans",
 })
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-})
+
+console.log('Inter font loaded:', inter) // Debug font loading
 
 export const metadata: Metadata = {
   title: "Contractor Planning Institute",
   description: "Learn about selling your construction firm and get personalized next steps",
-    generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -23,10 +19,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  console.log('Layout rendering, classes:', `${inter.className} bg-zinc-900 text-white`)
+  
   return (
-    <html lang="en" className="dark">
-      <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased bg-zinc-900`}>
-        {children}
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <body className={`${inter.className} bg-zinc-900 text-white`}>
+        <main className="min-h-screen">
+          {children}
+        </main>
       </body>
     </html>
   )
