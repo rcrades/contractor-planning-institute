@@ -7,6 +7,7 @@ import QuestionSection from "@/components/question-section"
 import ResultsScreen from "@/components/results-screen"
 import ProgressBar from "@/components/progress-bar"
 import EmailOverlay from "@/components/email-overlay"
+import { submitSurvey } from "@/app/actions"
 
 interface SurveyStep {
   type: "welcome" | "educational" | "question" | "results"
@@ -65,11 +66,19 @@ export default function SurveyPage() {
     window.scrollTo(0, 0)
   }
 
-  const handleEmailSubmit = (submittedEmail: string) => {
-    setEmail(submittedEmail)
-    setShowEmailOverlay(false)
-    // Here you would typically send the email to your backend
-    console.log(`Report sent to: ${submittedEmail}`)
+  const handleEmailSubmit = async (submittedEmail: string) => {
+    try {
+      const result = await submitSurvey(submittedEmail, responses)
+      if (result.success) {
+        setEmail(submittedEmail)
+        setShowEmailOverlay(false)
+      } else {
+        // You might want to show an error message to the user here
+        console.error('Failed to submit survey')
+      }
+    } catch (error) {
+      console.error('Error submitting survey:', error)
+    }
   }
 
   // Survey content structure

@@ -4,14 +4,15 @@ import { useState } from "react"
 import { EnvelopeClosedIcon } from "@radix-ui/react-icons"
 
 interface EmailOverlayProps {
-  onSubmit: (email: string) => void
+  onSubmit: (email: string) => Promise<void>
 }
 
 export default function EmailOverlay({ onSubmit }: EmailOverlayProps) {
   const [email, setEmail] = useState("")
   const [error, setError] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!email) {
       setError("Please enter your email")
@@ -21,7 +22,14 @@ export default function EmailOverlay({ onSubmit }: EmailOverlayProps) {
       setError("Please enter a valid email")
       return
     }
-    onSubmit(email)
+
+    setIsSubmitting(true)
+    try {
+      await onSubmit(email)
+    } catch (error) {
+      setError("Failed to save survey results. Please try again.")
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -49,15 +57,19 @@ export default function EmailOverlay({ onSubmit }: EmailOverlayProps) {
               }}
               placeholder="your@email.com"
               className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 rounded-lg text-white placeholder-neutral-400 focus:outline-none focus:border-yellow-400"
+              disabled={isSubmitting}
             />
             {error && <p className="mt-2 text-red-400 text-sm">{error}</p>}
           </div>
 
           <button
             type="submit"
-            className="w-full py-3 px-6 bg-yellow-400 hover:bg-yellow-500 text-black font-medium rounded-lg transition duration-200 shadow-md"
+            disabled={isSubmitting}
+            className={`w-full py-3 px-6 bg-yellow-400 hover:bg-yellow-500 text-black font-medium rounded-lg transition duration-200 shadow-md ${
+              isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
           >
-            Send Report
+            {isSubmitting ? 'Sending...' : 'Send Report'}
           </button>
 
           <p className="text-neutral-400 text-sm text-center">
