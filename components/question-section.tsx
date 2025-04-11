@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+
 import { useState, useEffect } from "react"
 import { ArrowLeftIcon, ArrowRightIcon, ChevronRightIcon } from "@radix-ui/react-icons"
 import ConfettiButton from "./confetti-button"
@@ -116,44 +117,45 @@ export default function QuestionSection({
             </div>
           )}
 
-          <div className="flex flex-col space-y-4 mt-8">
-            {isLastQuestion && currentQuestionIndex === questions.length - 1 ? (
-              <ConfettiButton
-                onClick={handleNext}
-                ref={confettiButtonRef}
-                className="w-full flex items-center justify-center py-3 px-6 bg-yellow-400 hover:bg-yellow-500 text-black font-medium rounded-lg transition duration-200 shadow-md"
-              >
-                Finish
-                <ArrowRightIcon className="ml-2 h-5 w-5" />
-              </ConfettiButton>
-            ) : (
-              <button
-                onClick={handleNext}
-                className="w-full flex items-center justify-center py-3 px-6 bg-yellow-400 hover:bg-yellow-500 text-black font-medium rounded-lg transition duration-200 shadow-md"
-              >
-                Continue
-                <ArrowRightIcon className="ml-2 h-5 w-5" />
-              </button>
-            )}
-            <div className="flex justify-between items-center">
-              <button
-                onClick={onBack}
-                className="flex items-center py-2 px-4 text-neutral-300 hover:text-white font-medium rounded-lg transition duration-200"
-              >
-                <ArrowLeftIcon className="mr-2 h-5 w-5" />
-                Back
-              </button>
+          <div className="flex items-center justify-between mt-8">
+            <button
+              onClick={onBack}
+              className="flex items-center py-2 px-4 text-neutral-300 hover:text-white font-medium rounded-lg transition duration-200"
+            >
+              <ArrowLeftIcon className="mr-2 h-5 w-5" />
+              Back
+            </button>
+            <div className="flex space-x-4">
               <button
                 onClick={handleSkip}
-                className="flex items-center py-2 px-4 text-neutral-300 hover:text-white font-medium rounded-lg transition duration-200"
+                className="flex items-center py-3 px-6 bg-neutral-700 hover:bg-neutral-600 text-white font-medium rounded-lg transition duration-200 shadow-md"
               >
                 Skip
                 <ChevronRightIcon className="ml-2 h-5 w-5" />
               </button>
+
+              {isLastQuestion && currentQuestionIndex === questions.length - 1 ? (
+                <ConfettiButton
+                  onClick={handleNext}
+                  ref={confettiButtonRef}
+                  className="flex items-center py-3 px-6 bg-yellow-400 hover:bg-yellow-500 text-black font-medium rounded-lg transition duration-200 shadow-md"
+                >
+                  Finish
+                  <ArrowRightIcon className="ml-2 h-5 w-5" />
+                </ConfettiButton>
+              ) : (
+                <button
+                  onClick={handleNext}
+                  className="flex items-center py-3 px-6 bg-yellow-400 hover:bg-yellow-500 text-black font-medium rounded-lg transition duration-200 shadow-md"
+                >
+                  Continue
+                  <ArrowRightIcon className="ml-2 h-5 w-5" />
+                </button>
+              )}
             </div>
           </div>
         </div>
       </div>
     </div>
   )
-} 
+}

@@ -33,28 +33,29 @@ export default function EducationalSection({ title, content, transition, onNext,
             <p className="text-yellow-400 font-medium text-lg">{transition}</p>
           </div>
 
-          <div className="flex flex-col space-y-4 mt-8">
+          <div className="flex items-center justify-between mt-8">
+            {onBack ? (
+              <button
+                onClick={onBack}
+                className="flex items-center py-2 px-4 text-neutral-300 hover:text-white font-medium rounded-lg transition duration-200"
+              >
+                <ArrowLeftIcon className="mr-2 h-5 w-5" />
+                Back
+              </button>
+            ) : (
+              <div></div>
+            )}
+
             <button
               onClick={onNext}
-              className="w-full flex items-center justify-center py-3 px-6 bg-yellow-400 hover:bg-yellow-500 text-black font-medium rounded-lg transition duration-200 shadow-md"
+              className="flex items-center py-3 px-6 bg-yellow-400 hover:bg-yellow-500 text-black font-medium rounded-lg transition duration-200 shadow-md"
             >
               Continue
               <ArrowRightIcon className="ml-2 h-5 w-5" />
             </button>
-            {onBack && (
-              <div className="flex justify-start">
-                <button
-                  onClick={onBack}
-                  className="flex items-center py-2 px-4 text-neutral-300 hover:text-white font-medium rounded-lg transition duration-200"
-                >
-                  <ArrowLeftIcon className="mr-2 h-5 w-5" />
-                  Back
-                </button>
-              </div>
-            )}
           </div>
         </div>
       </div>
     </div>
   )
-} 
+}
